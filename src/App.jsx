@@ -1,36 +1,22 @@
 import { useEffect, useState } from 'react'
 import { getRandomFact } from './services/facts'
+import { useCatImage } from './hooks/useCatImage'
+import { useCatFact } from './hooks/useCatFact'
 import './App.css'
 
 
 //const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`
 
+
 function App() {
-  const[fact, setFact] = useState('cualquier cosa')
-  const [image, setImage] = useState()
+  ///Aqui getNewFact es un metodo que recibo por parametro del return useCatFact.
+  ///En el useState pasa algo similar y le doy el nombre que quiera, aca tengo ese metodo y actualiza los datos.
+  const{fact, getNewFact} = useCatFact()
+  const image = useCatImage(fact)
 
-
-  //efectos tienen una sola responsabiliad
-  useEffect(getFact,[])
-
-useEffect(()=>{
-      const firstWord = fact.split(' ')[0];
-      console.log(firstWord);
-
-      fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
-        .then(res => res.json())
-       .then(response =>{
-         setImage(response.url)
-        })
-        .catch((err)=>{
-          console.log(err);
-        })
-}, [fact])
-
-function getFact(){
-    const fact = getRandomFact()
-      .then(newFact => setFact(newFact))
-}
+  function getFact(){
+    getNewFact();
+  }
 
   return (
     <main>
