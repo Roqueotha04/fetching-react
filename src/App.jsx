@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
+import { getRandomFact } from './services/facts'
 import './App.css'
 
 
-const RANDOM_FACT = `https://catfact.ninja/fact`
 //const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`
 
 function App() {
@@ -11,15 +11,7 @@ function App() {
 
 
   //efectos tienen una sola responsabiliad
-  useEffect(()=>{
-    fetch(RANDOM_FACT)
-      .then(res => res.json()) 
-//      .then(data =>setFact(data.fact)) Abajo hace lo mismo pero con desestructuración
-      .then(data =>{
-          const {fact} = data;
-          setFact(fact);
-      })
-  },[])
+  useEffect(getFact,[])
 
 useEffect(()=>{
       const firstWord = fact.split(' ')[0];
@@ -35,6 +27,11 @@ useEffect(()=>{
         })
 }, [fact])
 
+function getFact(){
+    const fact = getRandomFact()
+      .then(newFact => setFact(newFact))
+}
+
   return (
     <main>
       <h1>App de gatos</h1>
@@ -43,7 +40,7 @@ useEffect(()=>{
       <p>{fact}</p>
       {image && <img src={image} alt='cat'></img>}
       </section>
-      
+      <button onClick={getFact}>Get fact</button>
     </main>
   )
 }
